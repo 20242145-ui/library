@@ -5,29 +5,40 @@
     ViewData["Title"] = "Add Member";
 }
 
-<h1>Add Member</h1>
+<div class="member-form-page">
+    <div class="member-form-card">
 
-<hr />
+        <div class="member-form-icon">+</div>
+        <span class="member-form-label">MEMBER MANAGEMENT</span>
+        <h1>Add a Member</h1>
+        <p class="member-form-subtitle">
+            Register a new member in your library directory.
+        </p>
 
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create" method="post">
-            <div class="mb-3">
-                <label asp-for="FullName" class="form-label">Full Name</label>
-                <input asp-for="FullName" class="form-control" required />
+        <form asp-action="Create" method="post" class="member-form">
+
+            <div class="member-form-field">
+                <label asp-for="FullName">Full Name</label>
+                <input asp-for="FullName"
+                       class="form-control"
+                       placeholder="Enter the member's full name"
+                       required />
                 <span asp-validation-for="FullName" class="text-danger"></span>
             </div>
 
-            <div class="mb-3">
-                <label asp-for="Email" class="form-label">Email</label>
-                <input asp-for="Email" class="form-control" type="email" />
+            <div class="member-form-field">
+                <label asp-for="Email">Email Address</label>
+                <input asp-for="Email"
+                       class="form-control"
+                       type="email"
+                       placeholder="Enter email address" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
 
-            <div class="mb-3">
-                <label asp-for="MemberType" class="form-label">Member Type</label>
+            <div class="member-form-field">
+                <label asp-for="MemberType">Member Type</label>
                 <select asp-for="MemberType" class="form-select" required>
-                    <option value="">-- Select Member Type --</option>
+                    <option value="">Select a member type</option>
                     <option value="Regular">Regular</option>
                     <option value="Student">Student</option>
                     <option value="Faculty">Faculty</option>
@@ -35,9 +46,19 @@
                 <span asp-validation-for="MemberType" class="text-danger"></span>
             </div>
 
-            <button type="submit" class="btn btn-primary">Add Member</button>
-            <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+            <div class="member-form-actions">
+                <a asp-action="Index" class="member-form-cancel-btn">Cancel</a>
+                <button type="submit" class="member-form-submit-btn">
+                    Add Member
+                </button>
+            </div>
+
         </form>
+
+        <p class="member-form-footer">
+            Please check the member information before submitting.
+        </p>
+
     </div>
 </div>
 

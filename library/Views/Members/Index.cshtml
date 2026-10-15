@@ -1,48 +1,133 @@
-﻿@model List<library.Models.Member>
+﻿
+@model List<library.Models.Member>
 
 @{
     ViewData["Title"] = "Members";
 }
 
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <div>
-        <h1 class="mb-0">Members</h1>
-        <p class="text-muted mb-0">@Model.Count members in the library</p>
-    </div>
-    <a asp-action="Create" class="btn btn-primary">Add a member</a>
-</div>
+<div class="members-page">
 
-<table class="table table-striped table-hover align-middle">
-    <thead class="table-dark">
-        <tr>
-            <th class="text-end" style="width: 4rem">#</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Member Type</th>
-            <th style="width: 10rem"></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var member in Model)
-        {
-            <tr>
-                <td class="text-end">@member.MemberId</td>
-                <td>@member.FullName</td>
-                <td>@(member.Email ?? "—")</td>
-                <td>
-                    <span class="badge text-bg-secondary">
-                        @member.MemberType
-                    </span>
-                </td>
-                <td class="text-end">
-                    <a asp-action="Edit"
-                       asp-route-id="@member.MemberId"
-                       class="btn btn-sm btn-outline-secondary">Edit</a>
-                    <a asp-action="Delete"
-                       asp-route-id="@member.MemberId"
-                       class="btn btn-sm btn-outline-danger">Delete</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+    <div class="members-heading">
+        <div class="members-heading-text">
+            <span class="members-label">LIBRARY MANAGEMENT</span>
+            <h1>Members Directory</h1>
+            <p>Manage your library members and their information.</p>
+        </div>
+
+        <a asp-action="Create" class="members-add-btn">
+            <span class="members-add-icon">+</span>
+            Add a Member
+        </a>
+    </div>
+
+    <div class="members-summary">
+        <div class="members-summary-icon">M</div>
+        <div>
+            <span class="members-summary-label">Total Members</span>
+            <h2>@Model.Count</h2>
+        </div>
+    </div>
+
+    <div class="members-table-card">
+
+        <div class="members-table-header">
+            <div>
+                <h2>Member Directory</h2>
+                <p>View and manage registered library members.</p>
+            </div>
+
+            <span class="members-count-badge">
+                @Model.Count @(Model.Count == 1 ? "member" : "members")
+            </span>
+        </div>
+
+        <div class="members-table-wrapper">
+            <table class="members-table">
+                <thead>
+                    <tr>
+                        <th class="members-id-column">ID</th>
+                        <th>Full Name</th>
+                        <th>Email Address</th>
+                        <th>Member Type</th>
+                        <th class="members-actions-column">Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @if (Model.Count > 0)
+                    {
+                        @foreach (var member in Model)
+                        {
+                            <tr>
+                                <td class="members-id-cell">
+                                    #@member.MemberId
+                                </td>
+
+                                <td class="members-name-cell">
+                                    <span class="members-avatar">
+                                        @(string.IsNullOrWhiteSpace(member.FullName)
+                                            ? "M"
+                                            : member.FullName.Trim().Substring(0, 1).ToUpper())
+                                    </span>
+                                    <span>@member.FullName</span>
+                                </td>
+
+                                <td class="members-email-cell">
+                                    @(string.IsNullOrWhiteSpace(member.Email)
+                                        ? "—"
+                                        : member.Email)
+                                </td>
+
+                                <td>
+                                    <span class="member-type-badge @(
+                                        string.Equals(member.MemberType, "Student", StringComparison.OrdinalIgnoreCase)
+                                            ? "member-type-student"
+                                            : string.Equals(member.MemberType, "Faculty", StringComparison.OrdinalIgnoreCase)
+                                                ? "member-type-faculty"
+                                                : "member-type-regular")">
+                                        @member.MemberType
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <div class="members-actions">
+                                        <a asp-action="Edit"
+                                           asp-route-id="@member.MemberId"
+                                           class="members-edit-btn">
+                                            Edit
+                                        </a>
+
+                                        <a asp-action="Delete"
+                                           asp-route-id="@member.MemberId"
+                                           class="members-delete-btn">
+                                            Delete
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="5" class="members-empty-state">
+                                <div class="members-empty-icon">M</div>
+                                <h3>No members yet</h3>
+                                <p>Your directory is empty. Add your first member to get started.</p>
+                                <a asp-action="Create" class="members-empty-btn">
+                                    Add Your First Member
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="members-table-footer">
+            Showing @Model.Count @(Model.Count == 1 ? "member" : "members") in your directory
+        </div>
+
+    </div>
+
+</div>

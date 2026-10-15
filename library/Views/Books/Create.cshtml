@@ -1,39 +1,68 @@
-﻿@model Book
+﻿
+@model Book
+
 @{
     ViewData["Title"] = "Add a book";
 }
- 
-<h1 class="mb-3">Add a book</h1>
- 
-<form asp-action="Create" method="post" class="card card-body" style="max-width:36rem">
- 
-    <div class="mb-3">
-        <label asp-for="Title" class="form-label"></label>
-        <input asp-for="Title" class="form-control" />
-        <span asp-validation-for="Title" class="text-danger"></span>
-    </div>
- 
-    <div class="mb-3">
-        <label asp-for="Category" class="form-label"></label>
-        <select asp-for="Category" class="form-select">
-            <option value="">(none)</option>
-            <option>Classic</option>
-            <option>Fiction</option>
-            <option>Poetry</option>
-            <option>Reference</option>
-            <option>Textbook</option>
-        </select>
-    </div>
- 
-    <div class="mb-3">
-        <label asp-for="Price" class="form-label"></label>
-        <input asp-for="Price" class="form-control" />
-        <span asp-validation-for="Price" class="text-danger"></span>
-    </div>
- 
-    <div>
-        <button type="submit" class="btn btn-primary">Save</button>
-        <a asp-action="Index" class="btn btn-link">Cancel</a>
-    </div>
-</form>
 
+<div class="edit-page">
+    <div class="edit-card">
+
+        <div class="edit-icon">+</div>
+
+        <p class="edit-label">BOOK MANAGEMENT</p>
+
+        <h1>Add a book</h1>
+
+        <p class="edit-subtitle">
+            Add a new book to your library catalogue by completing the details below.
+        </p>
+
+        <form asp-action="Create" method="post" class="edit-form">
+
+            <div class="edit-field">
+                <label asp-for="Title" class="form-label">Book Title</label>
+                <input asp-for="Title" class="form-control"
+                       placeholder="Enter book title" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+
+            <div class="edit-field">
+                <label asp-for="Category" class="form-label">Category</label>
+                <select asp-for="Category" class="form-select">
+                    <option value="">Select a category</option>
+                    <option>Classic</option>
+                    <option>Fiction</option>
+                    <option>Poetry</option>
+                    <option>Reference</option>
+                    <option>Textbook</option>
+                </select>
+                <span asp-validation-for="Category" class="text-danger"></span>
+            </div>
+
+            <div class="edit-field">
+                <label asp-for="Price" class="form-label">Price</label>
+                <input asp-for="Price" class="form-control"
+                       placeholder="Enter book price"
+                       type="number" step="0.01" min="0" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+
+            <div class="edit-actions">
+                <a asp-action="Index" class="edit-cancel-btn">
+                    Cancel
+                </a>
+
+                <button type="submit" class="edit-save-btn">
+                    Add Book
+                </button>
+            </div>
+
+        </form>
+
+        <p class="edit-footer-note">
+            Please check the book details before adding the record.
+        </p>
+
+    </div>
+</div>

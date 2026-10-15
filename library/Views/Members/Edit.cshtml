@@ -1,0 +1,75 @@
+﻿
+@model library.Models.Member
+
+@{
+    ViewData["Title"] = "Edit Member";
+}
+
+<div class="member-form-page">
+    <div class="member-form-card">
+
+        <div class="member-form-icon">M</div>
+        <span class="member-form-label">MEMBER MANAGEMENT</span>
+        <h1>Edit Member</h1>
+        <p class="member-form-subtitle">
+            Update the information for this library member.
+        </p>
+
+        <div class="member-edit-id">
+            Member ID: <strong>#@Model.MemberId</strong>
+        </div>
+
+        <form asp-action="Edit"
+              asp-route-id="@Model.MemberId"
+              method="post"
+              class="member-form">
+
+            <input type="hidden" asp-for="MemberId" />
+
+            <div class="member-form-field">
+                <label asp-for="FullName">Full Name</label>
+                <input asp-for="FullName"
+                       class="form-control"
+                       placeholder="Enter the member's full name"
+                       required />
+                <span asp-validation-for="FullName" class="text-danger"></span>
+            </div>
+
+            <div class="member-form-field">
+                <label asp-for="Email">Email Address</label>
+                <input asp-for="Email"
+                       class="form-control"
+                       type="email"
+                       placeholder="Enter email address" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <div class="member-form-field">
+                <label asp-for="MemberType">Member Type</label>
+                <select asp-for="MemberType" class="form-select" required>
+                    <option value="Regular">Regular</option>
+                    <option value="Student">Student</option>
+                    <option value="Faculty">Faculty</option>
+                </select>
+                <span asp-validation-for="MemberType" class="text-danger"></span>
+            </div>
+
+            <div class="member-form-actions">
+                <a asp-action="Index" class="member-form-cancel-btn">Cancel</a>
+                <button type="submit" class="member-form-submit-btn">
+                    Save Changes
+                </button>
+            </div>
+
+        </form>
+
+        <p class="member-form-footer">
+            Review your changes before saving.
+        </p>
+
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

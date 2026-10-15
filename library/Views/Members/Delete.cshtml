@@ -1,0 +1,60 @@
+﻿
+@model library.Models.Member
+
+@{
+    ViewData["Title"] = "Delete Member";
+}
+
+<div class="member-delete-page">
+    <div class="member-delete-card">
+
+        <div class="member-delete-icon">!</div>
+        <span class="member-delete-label">MEMBER MANAGEMENT</span>
+        <h1>Delete Member</h1>
+        <p class="member-delete-subtitle">
+            Are you sure you want to delete this member?
+        </p>
+
+        <div class="member-delete-warning">
+            This action cannot be undone. Please review the member's information before confirming.
+        </div>
+
+        <div class="member-delete-details">
+            <div class="member-delete-detail">
+                <span>Member ID</span>
+                <strong>#@Model.MemberId</strong>
+            </div>
+
+            <div class="member-delete-detail">
+                <span>Full Name</span>
+                <strong>@Model.FullName</strong>
+            </div>
+
+            <div class="member-delete-detail">
+                <span>Email Address</span>
+                <strong>@(string.IsNullOrWhiteSpace(Model.Email) ? "—" : Model.Email)</strong>
+            </div>
+
+            <div class="member-delete-detail">
+                <span>Member Type</span>
+                <strong>@Model.MemberType</strong>
+            </div>
+        </div>
+
+        <form asp-action="Delete"
+              asp-route-id="@Model.MemberId"
+              method="post"
+              class="member-delete-actions">
+
+            <button type="submit" class="member-delete-confirm-btn">
+                Delete Member
+            </button>
+
+            <a asp-action="Index" class="member-delete-cancel-btn">
+                Cancel
+            </a>
+
+        </form>
+
+    </div>
+</div>

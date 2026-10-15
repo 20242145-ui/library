@@ -1,0 +1,74 @@
+﻿
+@model Book
+
+@{
+    ViewData["Title"] = "Edit a book";
+}
+
+<div class="edit-page">
+    <div class="edit-card">
+
+        <div class="edit-icon">
+            ✎
+        </div>
+
+        <p class="edit-label">BOOK MANAGEMENT</p>
+
+        <h1>Edit a book</h1>
+
+        <p class="edit-subtitle">
+            Update the information below to keep your book records accurate.
+        </p>
+
+        <div class="edit-book-id">
+            <span>BOOK ID</span>
+            <strong>#@Model.BookId</strong>
+        </div>
+
+        <form asp-action="Edit" method="post" class="edit-form">
+            <input type="hidden" asp-for="BookId" />
+
+            <div class="edit-field">
+                <label asp-for="Title" class="form-label">Book Title</label>
+                <input asp-for="Title" class="form-control"
+                       placeholder="Enter book title" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+
+            <div class="edit-field">
+                <label asp-for="Category" class="form-label">Category</label>
+                <select asp-for="Category" class="form-select">
+                    <option value="">(none)</option>
+                    <option>Classic</option>
+                    <option>Fiction</option>
+                    <option>Poetry</option>
+                    <option>Reference</option>
+                    <option>Textbook</option>
+                </select>
+                <span asp-validation-for="Category" class="text-danger"></span>
+            </div>
+
+            <div class="edit-field">
+                <label asp-for="Price" class="form-label">Price</label>
+                <input asp-for="Price" class="form-control"
+                       placeholder="Enter book price" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+
+            <div class="edit-actions">
+                <a asp-action="Index" class="edit-cancel-btn">
+                    Cancel
+                </a>
+
+                <button type="submit" class="edit-save-btn">
+                    Save Changes
+                </button>
+            </div>
+        </form>
+
+        <p class="edit-footer-note">
+            Make sure the details are correct before saving.
+        </p>
+
+    </div>
+</div>

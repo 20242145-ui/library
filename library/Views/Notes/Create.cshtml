@@ -1,0 +1,60 @@
+﻿```cshtml
+@model library.Models.Note
+
+@{
+    ViewData["Title"] = "Add Note";
+}
+
+<div class="notes-form-page">
+    <div class="notes-form-card">
+        <a asp-controller="Notes" asp-action="Index"
+           class="notes-back-link">← Back to Notes</a>
+
+        <div class="notes-form-heading">
+            <div class="notes-form-icon">+</div>
+            <span class="notes-eyebrow">NEW REMINDER</span>
+            <h1>Add Note</h1>
+            <p>Write down something important for your library.</p>
+        </div>
+
+        <form asp-controller="Notes" asp-action="Create" method="post">
+            <div asp-validation-summary="ModelOnly"
+                 class="notes-validation"></div>
+
+            <div class="notes-field">
+                <label asp-for="Title">Note Title</label>
+                <input asp-for="Title"
+                       class="notes-input"
+                       maxlength="100"
+                       placeholder="Enter your note title..."
+                       required />
+                <span asp-validation-for="Title"
+                      class="notes-validation"></span>
+            </div>
+
+            <div class="notes-field">
+                <label asp-for="Body">Description</label>
+                <textarea asp-for="Body"
+                          class="notes-input notes-textarea"
+                          rows="6"
+                          placeholder="Write your reminder here..."></textarea>
+                <span asp-validation-for="Body"
+                      class="notes-validation"></span>
+            </div>
+
+            <div class="notes-form-actions">
+                <a asp-controller="Notes" asp-action="Index"
+                   class="notes-btn notes-btn-outline">Cancel</a>
+
+                <button type="submit"
+                        class="notes-btn notes-btn-primary">
+                    Save Note
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

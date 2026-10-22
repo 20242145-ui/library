@@ -1,0 +1,48 @@
+﻿```cshtml
+@model library.Models.Note
+
+@{
+    ViewData["Title"] = "Delete Note";
+}
+
+<div class="notes-form-page">
+    <div class="notes-form-card notes-delete-card">
+        <a asp-controller="Notes" asp-action="Index"
+           class="notes-back-link">← Back to Notes</a>
+
+        <div class="notes-form-heading">
+            <div class="notes-delete-icon">!</div>
+            <span class="notes-eyebrow">DELETE REMINDER</span>
+            <h1>Delete Note?</h1>
+            <p>Are you sure you want to delete this note? This action cannot be undone.</p>
+        </div>
+
+        <div class="notes-delete-preview">
+            <span class="notes-preview-label">NOTE TITLE</span>
+            <h3>@Model.Title</h3>
+
+            <span class="notes-preview-label">DESCRIPTION</span>
+            <p>
+                @(string.IsNullOrWhiteSpace(Model.Body)
+                    ? "No body provided."
+                    : Model.Body)
+            </p>
+
+            <span class="notes-preview-label">CREATED ON</span>
+            <p>@Model.CreatedOn.ToString("MMMM dd, yyyy")</p>
+        </div>
+
+        <form asp-controller="Notes" asp-action="Delete" method="post">
+            <input type="hidden" name="id" value="@Model.NoteId" />
+
+            <div class="notes-form-actions">
+                <a asp-controller="Notes" asp-action="Index"
+                   class="notes-btn notes-btn-outline">Cancel</a>
+
+                <button type="submit" class="notes-btn notes-btn-danger">
+                    Yes, Delete
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

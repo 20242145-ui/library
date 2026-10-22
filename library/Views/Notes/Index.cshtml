@@ -1,0 +1,81 @@
+﻿@model List<library.Models.Note>
+
+@{
+    ViewData["Title"] = "My Notes";
+}
+
+<div class="notes-page">
+    <div class="notes-header">
+        <div>
+            <span class="notes-eyebrow">MY LIBRARY WORKSPACE</span>
+            <h1>My Notes</h1>
+            <p>Keep track of your library tasks and reminders.</p>
+        </div>
+
+        <a asp-controller="Notes" asp-action="Create"
+           class="notes-btn notes-btn-primary">
+            + Add Note
+        </a>
+    </div>
+
+    <div class="notes-summary">
+        <div class="notes-summary-icon">✎</div>
+        <div>
+            <strong>@Model.Count Notes</strong>
+            <p>Your reminders, organized in one place.</p>
+        </div>
+    </div>
+
+    @if (Model.Count == 0)
+    {
+        <div class="notes-empty">
+            <div class="notes-empty-icon">✎</div>
+            <h3>No notes yet</h3>
+            <p>Create your first note to get started.</p>
+            <a asp-controller="Notes" asp-action="Create"
+               class="notes-btn notes-btn-primary">
+                Create Your First Note
+            </a>
+        </div>
+    }
+    else
+    {
+        <div class="notes-grid">
+            @foreach (var note in Model)
+            {
+                <div class="note-card">
+                    <div class="note-card-top">
+                        <span class="note-icon">✎</span>
+                        <span class="note-date">
+                            @note.CreatedOn.ToString("MMM dd, yyyy")
+                        </span>
+                    </div>
+
+                    <h3>@note.Title</h3>
+
+                    <p class="note-body">
+                        @(string.IsNullOrWhiteSpace(note.Body)
+                            ? "No body provided."
+                            : note.Body)
+                    </p>
+
+                    <div class="note-actions">
+                        <a asp-controller="Notes"
+                           asp-action="Edit"
+                           asp-route-id="@note.NoteId"
+                           class="notes-btn notes-btn-outline">
+                            Edit
+                        </a>
+
+                        <a asp-controller="Notes"
+                           asp-action="Delete"
+                           asp-route-id="@note.NoteId"
+                           class="notes-btn notes-btn-danger">
+                            Delete
+                        </a>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

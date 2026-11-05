@@ -1,4 +1,4 @@
-﻿
+﻿using Npgsql;
 using library.Data;
 using library.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -7,17 +7,17 @@ namespace library.Controllers;
 
 public class MembersController : Controller
 {
-    private readonly MemberRepository _repository;
+    private readonly MemberRepository _members;
 
-    public MembersController(MemberRepository repository)
+    public MembersController(MemberRepository members)
     {
-        _repository = repository;
+        _members = members;
     }
 
     // READ: display all members.
     public async Task<IActionResult> Index()
     {
-        var members = await _repository.GetAllAsync();
+        var members = await _members.GetAllAsync();
         return View(members);
     }
 
@@ -35,10 +35,24 @@ public class MembersController : Controller
     {
         if (!ModelState.IsValid)
         {
+            // 2. Show the form again, with what was typed.
             return View(member);
         }
 
-        await _repository.AddAsync(member);
+        try
+        {
+            // 3. Save the new member.
+            await _members.AddAsync(member);
+        }
+        catch (PostgresException ex) when (ex.SqlState == PostgresErrorCodes.UniqueViolation)
+        {
+            // 5. Put a message under the Email box.
+            ModelState.AddModelError("Email", "Another member already uses this email.");
+            // 6. Show the form again, with what was typed.
+            return View(member);
+        }
+
+        // 7. The member was saved: go back to the list.
         return RedirectToAction(nameof(Index));
     }
 
@@ -46,7 +60,7 @@ public class MembersController : Controller
     [HttpGet]
     public async Task<IActionResult> Edit(long id)
     {
-        var member = await _repository.GetByIdAsync(id);
+        var member = await _members.GetByIdAsync(id);
 
         if (member == null)
         {
@@ -68,17 +82,24 @@ public class MembersController : Controller
 
         if (!ModelState.IsValid)
         {
+            // 2. Show the form again, with what was typed.
             return View(member);
         }
 
-        var existingMember = await _repository.GetByIdAsync(id);
-
-        if (existingMember == null)
+        try
         {
-            return NotFound();
+            // 3. Save the changes.
+            await _members.UpdateAsync(member);
+        }
+        catch (PostgresException ex) when (ex.SqlState == PostgresErrorCodes.UniqueViolation)
+        {
+            // 5. Put a message under the Email box.
+            ModelState.AddModelError("Email", "Another member already uses this email.");
+            // 6. Show the form again, with what was typed.
+            return View(member);
         }
 
-        await _repository.UpdateAsync(member);
+        // 7. The changes were saved: go back to the list.
         return RedirectToAction(nameof(Index));
     }
 
@@ -86,7 +107,7 @@ public class MembersController : Controller
     [HttpGet]
     public async Task<IActionResult> Delete(long id)
     {
-        var member = await _repository.GetByIdAsync(id);
+        var member = await _members.GetByIdAsync(id);
 
         if (member == null)
         {
@@ -101,14 +122,29 @@ public class MembersController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(long id)
     {
-        var member = await _repository.GetByIdAsync(id);
-
-        if (member == null)
+        try
         {
-            return NotFound();
+            // 1. Delete the member.
+            await _members.DeleteAsync(id);
+        }
+        catch (PostgresException ex) when (ex.SqlState == PostgresErrorCodes.ForeignKeyViolation)
+        {
+            // 3. Load the member again, to show them on the page.
+            var member = await _members.GetByIdAsync(id);
+
+            if (member == null)
+            {
+                // 5. Answer "not found".
+                return NotFound();
+            }
+
+            // 6. Set the message the page will show.
+            ViewBag.Error = "This member has loans on record, so the database will not delete them.";
+            // 7. Show the Delete page again, with the member.
+            return View("Delete", member);
         }
 
-        await _repository.DeleteAsync(id);
+        // 8. The member was deleted: go back to the list.
         return RedirectToAction(nameof(Index));
     }
 }

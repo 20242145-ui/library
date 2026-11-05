@@ -28,11 +28,12 @@ public class MembersController : Controller
         return View(new Member());
     }
 
-    // CREATE: save the new member.
+    // POST /Members/Create : the form was submitted.
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(Member member)
     {
+        // 1. A rule on the form was broken.
         if (!ModelState.IsValid)
         {
             // 2. Show the form again, with what was typed.
@@ -44,6 +45,7 @@ public class MembersController : Controller
             // 3. Save the new member.
             await _members.AddAsync(member);
         }
+        // 4. Another member already uses this email.
         catch (PostgresException ex) when (ex.SqlState == PostgresErrorCodes.UniqueViolation)
         {
             // 5. Put a message under the Email box.
@@ -70,7 +72,7 @@ public class MembersController : Controller
         return View(member);
     }
 
-    // EDIT: save the changes.
+    // POST /Members/Edit/5 : the changed form was submitted.
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(long id, Member member)
@@ -80,6 +82,7 @@ public class MembersController : Controller
             return NotFound();
         }
 
+        // 1. A rule on the form was broken.
         if (!ModelState.IsValid)
         {
             // 2. Show the form again, with what was typed.
@@ -91,6 +94,7 @@ public class MembersController : Controller
             // 3. Save the changes.
             await _members.UpdateAsync(member);
         }
+        // 4. Another member already uses this email.
         catch (PostgresException ex) when (ex.SqlState == PostgresErrorCodes.UniqueViolation)
         {
             // 5. Put a message under the Email box.
@@ -117,7 +121,7 @@ public class MembersController : Controller
         return View(member);
     }
 
-    // DELETE: remove the member.
+    // POST /Members/Delete/5 : the delete was confirmed.
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(long id)
@@ -127,11 +131,13 @@ public class MembersController : Controller
             // 1. Delete the member.
             await _members.DeleteAsync(id);
         }
+        // 2. The database refused because of a foreign key.
         catch (PostgresException ex) when (ex.SqlState == PostgresErrorCodes.ForeignKeyViolation)
         {
             // 3. Load the member again, to show them on the page.
             var member = await _members.GetByIdAsync(id);
 
+            // 4. There is no such member.
             if (member == null)
             {
                 // 5. Answer "not found".

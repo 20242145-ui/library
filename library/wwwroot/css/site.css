@@ -2818,3 +2818,47 @@ a {
         }
 }
 
+.members-form-wrapper {
+    padding: 28px;
+    max-width: 650px;
+}
+
+    .members-form-wrapper .form-label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #333;
+    }
+
+    .members-form-wrapper .form-select,
+    .members-form-wrapper .form-control {
+        width: 100%;
+        padding: 11px 14px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background-color: #fff;
+    }
+
+        .members-form-wrapper .form-select:focus,
+        .members-form-wrapper .form-control:focus {
+            border-color: #782642;
+            box-shadow: 0 0 0 3px rgba(120, 38, 66, 0.1);
+        }
+
+.members-form-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.members-cancel-btn {
+    text-decoration: none;
+    color: #782642;
+    font-weight: 600;
+    padding: 10px 16px;
+}
+
+    .members-cancel-btn:hover {
+        color: #50172b;
+    }

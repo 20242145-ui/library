@@ -1,0 +1,73 @@
+﻿@model BorrowForm
+@{
+    ViewData["Title"] = "Borrow a Book";
+}
+
+<div class="members-page">
+
+    <div class="members-heading">
+        <div class="members-heading-text">
+            <span class="members-label">LIBRARY MANAGEMENT</span>
+            <h1>Borrow a Book</h1>
+            <p>Record a new book borrowing transaction.</p>
+        </div>
+    </div>
+
+    <div class="members-table-card">
+
+        <div class="members-table-header">
+            <div>
+                <h2>Borrowing Details</h2>
+                <p>Fill in the information below to borrow a book.</p>
+            </div>
+        </div>
+
+        <div class="members-form-wrapper">
+
+            <form asp-action="Borrow" method="post">
+
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                <div class="mb-3">
+                    <label asp-for="MemberId" class="form-label">Member</label>
+                    <select asp-for="MemberId" asp-items="ViewBag.Members" class="form-select">
+                        <option value="">(choose a member)</option>
+                    </select>
+                    <span asp-validation-for="MemberId" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="BookId" class="form-label">Book</label>
+                    <select asp-for="BookId" asp-items="ViewBag.Books" class="form-select">
+                        <option value="">(choose a book)</option>
+                    </select>
+                    <span asp-validation-for="BookId" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="DaysAllowed" class="form-label">Days Allowed</label>
+                    <input asp-for="DaysAllowed" class="form-control" />
+                    <span asp-validation-for="DaysAllowed" class="text-danger"></span>
+                </div>
+
+                <div class="members-form-actions">
+                    <button type="submit" class="members-add-btn">
+                        Borrow Book
+                    </button>
+
+                    <a asp-action="Index" class="members-cancel-btn">
+                        Cancel
+                    </a>
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,130 @@
+﻿```cshtml
+@model List<library.Models.LoanView>
+
+@{
+    ViewData["Title"] = "Loans";
+}
+
+<div class="members-page">
+
+    <div class="members-heading">
+        <div class="members-heading-text">
+            <span class="members-label">LIBRARY MANAGEMENT</span>
+            <h1>Loan Records</h1>
+            <p>Manage borrowed books and monitor their loan status.</p>
+        </div>
+
+        <a asp-action="Borrow" class="members-add-btn">
+            <span class="members-add-icon">+</span>
+            Borrow a Book
+        </a>
+    </div>
+
+    <div class="members-summary">
+        <div class="members-summary-icon">L</div>
+        <div>
+            <span class="members-summary-label">Total Loans</span>
+            <h2>@Model.Count</h2>
+        </div>
+    </div>
+
+    <div class="members-table-card">
+
+        <div class="members-table-header">
+            <div>
+                <h2>Loan Directory</h2>
+                <p>View borrowed books and their current status.</p>
+            </div>
+
+            <span class="members-count-badge">
+                @Model.Count @(Model.Count == 1 ? "loan" : "loans")
+            </span>
+        </div>
+
+        <div class="members-table-wrapper">
+            <table class="members-table">
+                <thead>
+                    <tr>
+                        <th class="members-id-column">Loan ID</th>
+                        <th>Member</th>
+                        <th>Book</th>
+                        <th>Loaned On</th>
+                        <th>Due Date</th>
+                        <th>Status</th>
+                        <th class="members-actions-column">Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @if (Model.Count > 0)
+                    {
+                        @foreach (var loan in Model)
+                        {
+                            <tr>
+                                <td class="members-id-cell">
+                                    #@loan.LoanId
+                                </td>
+
+                                <td class="members-name-cell">
+                                    <span class="members-avatar">
+                                        @(string.IsNullOrWhiteSpace(loan.MemberName)
+                                            ? "M"
+                                            : loan.MemberName.Trim().Substring(0, 1).ToUpper())
+                                    </span>
+                                    <span>@loan.MemberName</span>
+                                </td>
+
+                                <td>@loan.BookTitle</td>
+
+                                <td>
+                                    @loan.LoanedOn.ToString("yyyy-MM-dd")
+                                </td>
+
+                                <td>
+                                    @loan.LoanedOn.AddDays(loan.DaysAllowed).ToString("yyyy-MM-dd")
+                                </td>
+
+                                <td>
+                                    <span class="member-type-badge @(
+                                          loan.Status == "Returned"
+                                              ? "member-type-student"
+                                              : loan.Status == "Overdue"
+                                                  ? "member-type-faculty"
+                                                  : "member-type-regular")">
+                                        @loan.Status
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <div class="members-actions">
+                                        @* Task 9 will add the Return button here. *@
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="7" class="members-empty-state">
+                                <div class="members-empty-icon">L</div>
+                                <h3>No loans yet</h3>
+                                <p>There are no recorded book loans. Borrow a book to get started.</p>
+
+                                <a asp-action="Borrow" class="members-empty-btn">
+                                    Borrow Your First Book
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="members-table-footer">
+            Showing @Model.Count @(Model.Count == 1 ? "loan" : "loans") in your records
+        </div>
+
+    </div>
+
+</div>

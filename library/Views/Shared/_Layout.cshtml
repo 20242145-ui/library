@@ -137,6 +137,11 @@
                         </li>
 
                         <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Loans" asp-action="Index">Loans</a>
+                        </li>
+
+
+                        <li class="nav-item">
                             <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Notes" ? "active" : "")"
                                asp-controller="Notes"
                                asp-action="Index">

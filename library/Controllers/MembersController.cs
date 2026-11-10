@@ -8,11 +8,15 @@ namespace library.Controllers;
 public class MembersController : Controller
 {
     private readonly MemberRepository _members;
+    private readonly LoanRepository _loans;
 
-    public MembersController(MemberRepository members)
+    // ASP.NET Core hands in the repositories, because Program.cs registered them.
+    public MembersController(MemberRepository members, LoanRepository loans)
     {
         _members = members;
+        _loans = loans;
     }
+
 
     // READ: display all members.
     public async Task<IActionResult> Index()
@@ -153,4 +157,24 @@ public class MembersController : Controller
         // 8. The member was deleted: go back to the list.
         return RedirectToAction(nameof(Index));
     }
+
+
+    public async Task<IActionResult> Details(long id)
+    {
+        var member = await _members.GetByIdAsync(id);
+
+        if (member == null)
+        {
+            return NotFound();
+        }
+
+        var details = new MemberDetails
+        {
+            Member = member,
+            Loans = await _loans.GetByMemberAsync(id)
+        };
+
+        return View(details);
+    }
+
 }

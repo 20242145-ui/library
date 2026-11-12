@@ -1,8 +1,12 @@
-﻿```cshtml
-@model List<library.Models.LoanView>
+﻿@model List<library.Models.LoanView>
 
 @{
     ViewData["Title"] = "Loans";
+
+    var totalLoans = Model.Count;
+    var outLoans = Model.Count(loan => loan.Status == "Out");
+    var overdueLoans = Model.Count(loan => loan.Status == "Overdue");
+    var returnedLoans = Model.Count(loan => loan.Status == "Returned");
 }
 
 <div class="members-page">
@@ -20,12 +24,40 @@
         </a>
     </div>
 
-    <div class="members-summary">
-        <div class="members-summary-icon">L</div>
-        <div>
-            <span class="members-summary-label">Total Loans</span>
-            <h2>@Model.Count</h2>
+    <div class="loan-summary-grid">
+
+        <div class="members-summary">
+            <div class="members-summary-icon">L</div>
+            <div>
+                <span class="members-summary-label">Total Loans</span>
+                <h2>@totalLoans</h2>
+            </div>
         </div>
+
+        <div class="members-summary loan-summary-out">
+            <div class="members-summary-icon">O</div>
+            <div>
+                <span class="members-summary-label">Books Out</span>
+                <h2>@outLoans</h2>
+            </div>
+        </div>
+
+        <div class="members-summary loan-summary-overdue">
+            <div class="members-summary-icon">!</div>
+            <div>
+                <span class="members-summary-label">Overdue</span>
+                <h2>@overdueLoans</h2>
+            </div>
+        </div>
+
+        <div class="members-summary loan-summary-returned">
+            <div class="members-summary-icon">✓</div>
+            <div>
+                <span class="members-summary-label">Returned</span>
+                <h2>@returnedLoans</h2>
+            </div>
+        </div>
+
     </div>
 
     <div class="members-table-card">
@@ -37,7 +69,7 @@
             </div>
 
             <span class="members-count-badge">
-                @Model.Count @(Model.Count == 1 ? "loan" : "loans")
+                @totalLoans @(totalLoans == 1 ? "loan" : "loans")
             </span>
         </div>
 
@@ -85,12 +117,7 @@
                                 </td>
 
                                 <td>
-                                    <span class="member-type-badge @(
-                                          loan.Status == "Returned"
-                                              ? "member-type-student"
-                                              : loan.Status == "Overdue"
-                                                  ? "member-type-faculty"
-                                                  : "member-type-regular")">
+                                    <span class="loan-status-badge @(loan.Status == "Returned" ? "loan-status-returned" : loan.Status == "Overdue" ? "loan-status-overdue" : "loan-status-out")">
                                         @loan.Status
                                     </span>
                                 </td>
@@ -100,10 +127,11 @@
                                         @if (loan.ReturnedOn == null)
                                         {
                                             <form asp-action="Return" asp-route-id="@loan.LoanId" method="post">
-                                                <button type="submit" class="btn btn-sm btn-outline-success">Return</button>
+                                                <button type="submit" class="loan-return-btn">
+                                                    Return
+                                                </button>
                                             </form>
                                         }
-
                                     </div>
                                 </td>
                             </tr>
@@ -128,7 +156,7 @@
         </div>
 
         <div class="members-table-footer">
-            Showing @Model.Count @(Model.Count == 1 ? "loan" : "loans") in your records
+            Showing @totalLoans @(totalLoans == 1 ? "loan" : "loans") in your records
         </div>
 
     </div>

@@ -1,19 +1,25 @@
-﻿
-@model library.Models.Member
+﻿@model library.Models.Member
 
 @{
     ViewData["Title"] = "Delete Member";
 }
 
 <div class="member-delete-page">
+
     <div class="member-delete-card">
 
         <div class="member-delete-icon">!</div>
+
         <span class="member-delete-label">MEMBER MANAGEMENT</span>
+
         <h1>Delete Member</h1>
+
         @if (ViewBag.Error != null)
         {
-            <div class="alert alert-danger">@ViewBag.Error</div>
+            <div class="alert alert-danger member-delete-error">
+                <strong>Unable to delete member</strong>
+                <p>@ViewBag.Error</p>
+            </div>
         }
 
         <p class="member-delete-subtitle">
@@ -21,10 +27,12 @@
         </p>
 
         <div class="member-delete-warning">
-            This action cannot be undone. Please review the member's information before confirming.
+            <strong>Warning</strong>
+            <p>This action cannot be undone. Please review the member's information before confirming.</p>
         </div>
 
         <div class="member-delete-details">
+
             <div class="member-delete-detail">
                 <span>Member ID</span>
                 <strong>#@Model.MemberId</strong>
@@ -44,6 +52,7 @@
                 <span>Member Type</span>
                 <strong>@Model.MemberType</strong>
             </div>
+
         </div>
 
         <form asp-action="Delete"
@@ -62,4 +71,5 @@
         </form>
 
     </div>
+
 </div>

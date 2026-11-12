@@ -3,6 +3,7 @@
 }
 
 <div class="home-hero">
+
     <p class="home-label">LIBRARY DATABASE MANAGEMENT SYSTEM</p>
 
     <h1>
@@ -24,6 +25,7 @@
     </p>
 
     <div class="home-buttons">
+
         <a asp-controller="Books" asp-action="Index"
            class="btn home-btn-primary">
             Manage Books
@@ -33,9 +35,21 @@
            class="btn home-btn-outline">
             Manage Members
         </a>
+
+        <a asp-controller="Loans" asp-action="Index"
+           class="btn home-btn-primary">
+            Manage Loans
+        </a>
+
+        <a asp-controller="Notes" asp-action="Index"
+           class="btn home-btn-outline">
+            Manage Notes
+        </a>
+
     </div>
 
     <p class="home-footer-text">
         ORGANIZE <span>•</span> MANAGE <span>•</span> MAINTAIN
     </p>
+
 </div>

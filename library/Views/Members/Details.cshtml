@@ -1,40 +1,96 @@
 ﻿@model MemberDetails
+
 @{
     ViewData["Title"] = Model.Member.FullName;
 }
 
-<h1 class="mb-1">@Model.Member.FullName</h1>
-<p class="text-muted">@Model.Member.MemberType · @(Model.Member.Email ?? "no email")</p>
+<div class="members-page">
 
-<h2 class="h5 mt-4">Loans</h2>
-@if (Model.Loans.Count == 0)
-{
-    <p>This member has never borrowed a book.</p>
-}
-else
-{
-    <table class="table table-striped align-middle">
-        <thead class="table-dark">
-            <tr>
-                <th>Book</th>
-                <th>Loaned</th>
-                <th>Returned</th>
-                <th>Status</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var loan in Model.Loans)
+    <div class="members-heading">
+        <div class="members-heading-text">
+            <span class="members-label">LIBRARY MANAGEMENT</span>
+            <h1>@Model.Member.FullName</h1>
+            <p>View this member's information and borrowing history.</p>
+        </div>
+
+        <a asp-action="Index" class="members-back-btn">
+            ← Back to Members
+        </a>
+    </div>
+
+    <div class="member-details-card">
+        <div class="member-details-avatar">
+            @(string.IsNullOrWhiteSpace(Model.Member.FullName)
+                ? "M"
+                : Model.Member.FullName.Trim().Substring(0, 1).ToUpper())
+        </div>
+
+        <div class="member-details-info">
+            <h2>@Model.Member.FullName</h2>
+            <span class="member-type-badge member-type-regular">
+                @Model.Member.MemberType
+            </span>
+            <p>@(Model.Member.Email ?? "No email address")</p>
+        </div>
+    </div>
+
+    <div class="members-table-card">
+
+        <div class="members-table-header">
+            <div>
+                <h2>Loan History</h2>
+                <p>Books borrowed by this member.</p>
+            </div>
+
+            <span class="members-count-badge">
+                @Model.Loans.Count @(Model.Loans.Count == 1 ? "loan" : "loans")
+            </span>
+        </div>
+
+        <div class="members-table-wrapper">
+            @if (Model.Loans.Count == 0)
             {
-                <tr>
-                    <td>@loan.BookTitle</td>
-                    <td>@(loan.LoanedOn.ToString("yyyy-MM-dd"))</td>
-                    <td>@(loan.ReturnedOn?.ToString("yyyy-MM-dd") ?? "—")</td>
-                    <td>@loan.Status</td>
-                </tr>
+                <div class="members-empty-state">
+                    <div class="members-empty-icon">L</div>
+                    <h3>No loans yet</h3>
+                    <p>This member has never borrowed a book.</p>
+                </div>
             }
-        </tbody>
-    </table>
-}
+            else
+            {
+                <table class="members-table">
+                    <thead>
+                        <tr>
+                            <th>Book</th>
+                            <th>Loaned On</th>
+                            <th>Returned On</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
 
-<a asp-action="Index" class="btn btn-link px-0">Back to members</a>
+                    <tbody>
+                        @foreach (var loan in Model.Loans)
+                        {
+                            <tr>
+                                <td>@loan.BookTitle</td>
+                                <td>@loan.LoanedOn.ToString("yyyy-MM-dd")</td>
+                                <td>@(loan.ReturnedOn?.ToString("yyyy-MM-dd") ?? "—")</td>
+                                <td>
+                                    <span class="loan-status-badge @(loan.Status == "Returned" ? "loan-status-returned" : loan.Status == "Overdue" ? "loan-status-overdue" : "loan-status-out")">
+                                        @loan.Status
+                                    </span>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
 
+        <div class="members-table-footer">
+            Showing @Model.Loans.Count @(Model.Loans.Count == 1 ? "loan" : "loans") for this member
+        </div>
+
+    </div>
+
+</div>

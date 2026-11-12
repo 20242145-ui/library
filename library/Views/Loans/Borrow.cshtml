@@ -1,9 +1,10 @@
 ﻿@model BorrowForm
+
 @{
     ViewData["Title"] = "Borrow a Book";
 }
 
-<div class="members-page">
+<div class="members-page borrow-page">
 
     <div class="members-heading">
         <div class="members-heading-text">
@@ -13,46 +14,51 @@
         </div>
     </div>
 
-    <div class="members-table-card">
+    <div class="borrow-form-card">
 
-        <div class="members-table-header">
+        <div class="borrow-form-header">
+            <div class="borrow-form-icon">+</div>
             <div>
                 <h2>Borrowing Details</h2>
-                <p>Fill in the information below to borrow a book.</p>
+                <p>Complete the information below to record a new loan.</p>
             </div>
         </div>
 
-        <div class="members-form-wrapper">
+        <div class="borrow-form-content">
 
             <form asp-action="Borrow" method="post">
 
-                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                <div asp-validation-summary="ModelOnly" class="text-danger borrow-validation-summary"></div>
 
-                <div class="mb-3">
-                    <label asp-for="MemberId" class="form-label">Member</label>
+                <div class="borrow-form-group">
+                    <label asp-for="MemberId" class="form-label">Select Member</label>
                     <select asp-for="MemberId" asp-items="ViewBag.Members" class="form-select">
                         <option value="">(choose a member)</option>
                     </select>
-                    <span asp-validation-for="MemberId" class="text-danger"></span>
+                    <span asp-validation-for="MemberId" class="text-danger borrow-field-error"></span>
                 </div>
 
-                <div class="mb-3">
-                    <label asp-for="BookId" class="form-label">Book</label>
+                <div class="borrow-form-group">
+                    <label asp-for="BookId" class="form-label">Select Book</label>
                     <select asp-for="BookId" asp-items="ViewBag.Books" class="form-select">
                         <option value="">(choose a book)</option>
                     </select>
-                    <span asp-validation-for="BookId" class="text-danger"></span>
+                    <span asp-validation-for="BookId" class="text-danger borrow-field-error"></span>
                 </div>
 
-                <div class="mb-3">
+                <div class="borrow-form-group">
                     <label asp-for="DaysAllowed" class="form-label">Days Allowed</label>
                     <input asp-for="DaysAllowed" class="form-control" />
-                    <span asp-validation-for="DaysAllowed" class="text-danger"></span>
+                    <span asp-validation-for="DaysAllowed" class="text-danger borrow-field-error"></span>
                 </div>
 
-                <div class="members-form-actions">
+                <div class="borrow-form-note">
+                    Please review the selected member, book, and allowed borrowing period before submitting.
+                </div>
+
+                <div class="borrow-form-actions">
                     <button type="submit" class="members-add-btn">
-                        Borrow Book
+                        + Borrow Book
                     </button>
 
                     <a asp-action="Index" class="members-cancel-btn">
